@@ -1,0 +1,60 @@
+﻿@using Core.Models
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Operation Name</th>
+            <th>Operation Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>
+                <button type="button" class="btn">Create</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var operation in operations) {
+            <tr>
+                <td>@operation.Name</td>
+                <td>@operation.OperationType.Name</td>
+                <td>@operation.Amount</td>
+                <td>@operation.Date.ToShortDateString()</td>
+                <td>
+                    <button type="button" class="btn">Edit</button>
+                    <button type="button" class="btn">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private Operation[] operations;
+
+    protected override async Task OnInitializedAsync() {
+        operations = new[] {
+            new Operation {
+                Id = new Guid(),
+                Name = "First Operation",
+                OperationType = new OperationType {
+                    Id = new Guid(),
+                    IsIncome = true,
+                    Name = "Salary"
+                },
+                Date = DateTime.Now,
+                Amount = 5000
+                },
+            new Operation {
+                Id = new Guid(),
+                Name = "Second Operation",
+                OperationType = new OperationType {
+                    Id = new Guid(),
+                    IsIncome = false,
+                    Name = "Taxes"
+                },
+                Date = DateTime.Now,
+                Amount = 500
+            }
+        };
+    }
+}
