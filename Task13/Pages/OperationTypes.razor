@@ -1,9 +1,50 @@
 ﻿@page "/operationtypes"
 
-<h1>OperationTypes</h1>
+@using Core.Models
 
-<p>OperationTypes Component</p>
+<h1>Operation Types</h1>
+
+<button>Create</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Operation Type Name</th>
+            <th>Income/Expense</th>
+            <th />
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var operationType in operationTypes) {
+            <tr>
+                <td>@operationType.Name</td>
+                @if (operationType.IsIncome) {
+                    <td>Income</td>
+                }
+                else {
+                    <td>Expense</td>
+                }
+                <td><button>Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
+        private OperationType[] operationTypes;
 
+        protected override async Task OnInitializedAsync() {
+            operationTypes = new[] {
+            new OperationType {
+                Id = new Guid(),
+                IsIncome = true,
+                Name = "Salary"
+                },
+            new OperationType {
+                Id = new Guid(),
+                IsIncome = false,
+                Name = "Taxes"
+            }
+            };
+        }
 }
