@@ -4,41 +4,62 @@
 
 
 
-    <CreateOperationTypeDialogComponent Title="SomeTitle" Text="SomeText"/>
+@if (DeleteDialogOpen) {
+<DialogComponent Title="Are you sure?" OnClose="@OnDeleteDialogClose">
+    Do you want to delete this entry?
+</DialogComponent>
+}
 
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Operation Type Name</th>
+            <th>Income/Expense</th>
+            <th>
+                <button type="button" class="btn">Create</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var operationType in operationTypes) {
             <tr>
-                <th>Operation Type Name</th>
-                <th>Income/Expense</th>
-                <th>
-                    <button type="button" class="btn">Create</button>
-                </th>
+                <td>@operationType.Name</td>
+                @if (operationType.IsIncome) {
+                    <td>Income</td>
+                }
+                else {
+                    <td>Expense</td>
+                }
+                <td>
+                    <button type="button" class="btn" @onclick="() => OpenDeleteDialog()">
+                        Delete
+                    </button>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var operationType in operationTypes) {
-                <tr>
-                    <td>@operationType.Name</td>
-                    @if (operationType.IsIncome) {
-                        <td>Income</td>
-                    }
-                    else {
-                        <td>Expense</td>
-                    }
-                    <td>
-                        <button type="button" class="btn">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    @code {
-        private List<OperationType> operationTypes = new List<OperationType>();
-
-        protected override async Task OnInitializedAsync() {
-            var o = await OperationTypesService.GetAllAsync();
-            operationTypes = o.ToList();
         }
+    </tbody>
+</table>
+
+@code {
+    private List<OperationType> operationTypes = new List<OperationType>();
+
+    public bool DeleteDialogOpen { get; set; }
+
+
+    protected override async Task OnInitializedAsync() {
+        var o = await OperationTypesService.GetAllAsync();
+        operationTypes = o.ToList();
     }
+
+
+    private void OpenDeleteDialog() {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnDeleteDialogClose(bool accepted) {
+        DeleteDialogOpen = false;
+        await OperationTypesService.DeleteAsync(new Guid());
+        StateHasChanged();
+    }
+}
