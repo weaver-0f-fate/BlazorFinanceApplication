@@ -2,6 +2,23 @@
 @using Services.Interfaces
 @inject IOperationsService OperationsService
 
+
+@if (CreateDialogOpen) {
+    <DialogComponent Title="Create Operation" OnClose="@OnCreateDialogClose">
+        Create New
+    </DialogComponent>
+}
+@if (UpdateDialogOpen) {
+    <DialogComponent Title="Update Operation X" OnClose="@OnUpdateDialogClose">
+        Update X
+    </DialogComponent>
+}
+@if (DeleteDialogOpen) {
+    <DialogComponent Title="Are you sure?" OnClose="@OnDeleteDialogClose">
+        Do you want to delete this entry?
+    </DialogComponent>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -10,7 +27,7 @@
             <th>Amount</th>
             <th>Date</th>
             <th>
-                <button type="button" class="btn">Create</button>
+                <button type="button" class="btn" @onclick="() => OpenCreateDialog()">Create</button>
             </th>
         </tr>
     </thead>
@@ -22,8 +39,8 @@
                 <td>@operation.Amount</td>
                 <td>@operation.Date.ToShortDateString()</td>
                 <td>
-                    <button type="button" class="btn">Edit</button>
-                    <button type="button" class="btn">Delete</button>
+                    <button type="button" class="btn" @onclick="() => OpenUpdateDialog()">Edit</button>
+                    <button type="button" class="btn" @onclick="() => OpenDeleteDialog()">Delete</button>
                 </td>
             </tr>
         }
@@ -37,4 +54,52 @@
         var o = await OperationsService.GetAllAsync();
         operations = o.ToList();
     }
+
+    #region DeleteDialog
+    public bool DeleteDialogOpen { get; set; }
+
+    private void OpenDeleteDialog() {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+    private async Task OnDeleteDialogClose(bool accepted) {
+        DeleteDialogOpen = false;
+        await OperationsService.DeleteAsync(new Guid());
+        StateHasChanged();
+    }
+    #endregion
+
+    #region CreateDialog
+    public bool CreateDialogOpen { get; set; }
+
+    private void OpenCreateDialog() {
+        CreateDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnCreateDialogClose(bool accepted) {
+        CreateDialogOpen = false;
+
+        //TODO Create Logic
+
+        StateHasChanged();
+    }
+    #endregion
+
+    #region UpdateDialog
+    public bool UpdateDialogOpen { get; set; }
+
+    private void OpenUpdateDialog() {
+        UpdateDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnUpdateDialogClose(bool accepted) {
+        UpdateDialogOpen = false;
+
+        //TODO Update logic 
+
+        StateHasChanged();
+    }
+    #endregion
 }

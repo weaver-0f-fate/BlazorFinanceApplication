@@ -23,19 +23,24 @@ namespace Services.Services {
         }
         public async Task<OperationType> GetAsync(Guid id) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO 
+            return new OperationType {
+                Id = new Guid(),
+                IsIncome = false,
+                Name = "Taxes"
+            };
         }
         public async Task CreateAsync(OperationType item) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO 
         }
         public async Task UpdateAsync(OperationType item) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO 
         }
         public async Task DeleteAsync(Guid id) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO 
         }
     }
 }

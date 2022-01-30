@@ -36,32 +36,45 @@ namespace Services.Services {
 
         public async Task<IEnumerable<Operation>> GetAllAtDateAsync(DateTime date) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
+            return null;
         }
 
         public async Task<IEnumerable<Operation>> GetAllAtPeriodAsync(DateTime startDate, DateTime endDate) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
+            return null;
         }
 
         public async Task<Operation> GetAsync(Guid id) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
+            return new Operation {
+                Id = new Guid(),
+                Name = "Second Operation",
+                OperationType = new OperationType {
+                    Id = new Guid(),
+                    IsIncome = false,
+                    Name = "Taxes"
+                },
+                Date = DateTime.Now,
+                Amount = 500
+            };
         }
 
         public async Task CreateAsync(Operation operation) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
         }
 
         public async Task UpdateAsync(Operation operation) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
         }
 
         public async Task DeleteAsync(Guid id) {
             await Task.Delay(1);
-            throw new NotImplementedException();
+            //TODO
         }
     }
 }
