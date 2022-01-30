@@ -1,4 +1,6 @@
 ﻿@using Core.Models
+@using Services.Interfaces
+@inject IOperationsService OperationsService
 
 <table class="table">
     <thead>
@@ -29,32 +31,10 @@
 </table>
 
 @code {
-    private Operation[] operations;
+    private List<Operation> operations = new List<Operation>();
 
     protected override async Task OnInitializedAsync() {
-        operations = new[] {
-            new Operation {
-                Id = new Guid(),
-                Name = "First Operation",
-                OperationType = new OperationType {
-                    Id = new Guid(),
-                    IsIncome = true,
-                    Name = "Salary"
-                },
-                Date = DateTime.Now,
-                Amount = 5000
-                },
-            new Operation {
-                Id = new Guid(),
-                Name = "Second Operation",
-                OperationType = new OperationType {
-                    Id = new Guid(),
-                    IsIncome = false,
-                    Name = "Taxes"
-                },
-                Date = DateTime.Now,
-                Amount = 500
-            }
-        };
+        var o = await OperationsService.GetAllAsync();
+        operations = o.ToList();
     }
 }

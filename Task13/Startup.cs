@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Services.Interfaces;
+using Services.Services;
 
 namespace Task13 {
     public class Startup {
@@ -20,6 +19,9 @@ namespace Task13 {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddTransient<IOperationsService, OperationsService>();
+            services.AddTransient<IOperationTypesService, OperationTypesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

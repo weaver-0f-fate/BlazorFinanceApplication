@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task13", "Task13\Task13.csproj", "{B93DC0B0-2998-4D56-9DCF-AE498BDA95FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{11AB3889-1B31-4CDD-A2B6-7E3BE9FF7C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{11AB3889-1B31-4CDD-A2B6-7E3BE9FF7C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{7CAA45E3-FF5E-40F2-826A-0984B8659750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{7CAA45E3-FF5E-40F2-826A-0984B8659750}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,44 @@
+﻿@using Core.Models
+@using Services.Interfaces
+@inject IOperationTypesService OperationTypesService
+
+
+
+    <CreateOperationTypeDialogComponent Title="SomeTitle" Text="SomeText"/>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Operation Type Name</th>
+                <th>Income/Expense</th>
+                <th>
+                    <button type="button" class="btn">Create</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var operationType in operationTypes) {
+                <tr>
+                    <td>@operationType.Name</td>
+                    @if (operationType.IsIncome) {
+                        <td>Income</td>
+                    }
+                    else {
+                        <td>Expense</td>
+                    }
+                    <td>
+                        <button type="button" class="btn">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @code {
+        private List<OperationType> operationTypes = new List<OperationType>();
+
+        protected override async Task OnInitializedAsync() {
+            var o = await OperationTypesService.GetAllAsync();
+            operationTypes = o.ToList();
+        }
+    }
