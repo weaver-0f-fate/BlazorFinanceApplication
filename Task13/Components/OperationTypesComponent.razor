@@ -1,30 +1,26 @@
-﻿@using Core.ComponentsModels
-@using Core.Models
+﻿@using Core.Models
 @using Services.Interfaces
 @inject IOperationTypesService OperationTypesService
 
 
 @if (CreateDialogOpen) {
     <DialogComponent Title="Create Operation Type" OnClose="@OnCreateDialogClose">
-        <form>
+        <EditForm Model="@newType">
             <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name">
+                <label for="Name">Name</label>
+                <InputText @bind-Value=newType.Name class="form-control" id="Name" />
             </div>
             <div class="form-group">
-                <label for="type">Type:</label>
-                <select class="form-control" id="type">
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
+                <label for="IsIncome">IsIncome</label>
+                <InputCheckbox @bind-Value="newType.IsIncome" class="form-control" id="IsIncome"/>
             </div>
-        </form>
+        </EditForm>
     </DialogComponent>
 }
 
 @if (DeleteDialogOpen) {
     <DialogComponent Title="Are you sure?"  OnClose="@OnDeleteDialogClose">
-        Delete This
+        Delete @currentType.Name?
     </DialogComponent>
 }
 
@@ -60,6 +56,7 @@
 
 @code {
     private List<OperationType> operationTypes = new List<OperationType>();
+    private OperationType newType = new OperationType();
     private OperationType currentType;
 
     protected override async Task OnInitializedAsync() {
@@ -82,9 +79,7 @@
         if (accepted) {
             await OperationTypesService.DeleteAsync(currentType.Id);
         }
-        else {
-            currentType = null;
-        }
+        currentType = null;
         StateHasChanged();
     }
 
@@ -102,16 +97,14 @@
     private async Task OnCreateDialogClose(bool accepted) {
         CreateDialogOpen = false;
 
-        //TODO Create Logic
-
-        var type = new OperationType {
-            Id = new Guid(),
-            IsIncome = true,
-            Name = "BlazorCreatedType2"
-        };
-
-        await OperationTypesService.CreateAsync(type);
+        if (accepted) {
+            await OperationTypesService.CreateAsync(newType);
+        }
         StateHasChanged();
     }
     #endregion
+
+    private void OnChange() {
+
+    }
 }
