@@ -1,0 +1,24 @@
+﻿@using Core.Models
+
+<EditForm Model="@OperationType">
+    <div class="form-group row">
+        <label for="Name" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10">
+            <InputText @bind-Value=OperationType.Name class="form-control" id="Name"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="IsIncome" class="col-sm-2 col-form-label">Type</label>
+        <div class="col-sm-10">
+            <InputSelectBoolean @bind-Value="OperationType.IsIncome" class="form-control" id="IsIncome">
+                <option value="True">Income</option>
+                <option value="False">Expense</option>
+            </InputSelectBoolean>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public OperationType OperationType { get; set; }
+}

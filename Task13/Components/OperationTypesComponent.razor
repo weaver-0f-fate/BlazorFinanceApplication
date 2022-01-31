@@ -5,16 +5,7 @@
 
 @if (CreateDialogOpen) {
     <DialogComponent Title="Create Operation Type" OnClose="@OnCreateDialogCloseAsync">
-        <EditForm Model="@newType">
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <InputText @bind-Value=newType.Name class="form-control" id="Name" />
-            </div>
-            <div class="form-group">
-                <label for="IsIncome">IsIncome</label>
-                <InputCheckbox @bind-Value="newType.IsIncome" class="form-control" id="IsIncome"/>
-            </div>
-        </EditForm>
+        <OperationTypesFormComponent OperationType="@currentType"/>
     </DialogComponent>
 }
 
@@ -24,16 +15,12 @@
     </DialogComponent>
 }
 
-
-
 <table class="table">
     <thead>
         <tr>
             <th>Operation Type Name</th>
             <th>Income/Expense</th>
-            <th>
-                <button type="button" class="btn" @onclick="() => OpenCreateDialog()">Create</button>
-            </th>
+            <th><button type="button" class="btn" @onclick="() => OpenCreateDialog()">Create</button></th>
         </tr>
     </thead>
     <tbody>
@@ -46,26 +33,41 @@
                 else {
                     <td>Expense</td>
                 }
-                <td>
-                    <button type="button" class="btn" @onclick="() => OpenDeleteDialog(operationType)">Delete</button>
-                </td>
+                <td><button type="button" class="btn" @onclick="() => OpenDeleteDialog(operationType)">Delete</button></td>
             </tr>
         }
     </tbody>
 </table>
 
 @code {
-    private List<OperationType> operationTypes = new List<OperationType>();
-    private OperationType newType = new OperationType();
+    private List<OperationType> operationTypes;
     private OperationType currentType;
 
+    public bool DeleteDialogOpen { get; set; }
+    public bool CreateDialogOpen { get; set; }
+
     protected override async Task OnInitializedAsync() {
+        operationTypes = new List<OperationType>();
+        currentType = new OperationType();
         await LoadDataAsync();
     }
 
-    #region DeleteDialog
+    private void OpenCreateDialog() {
+        CreateDialogOpen = true;
+        StateHasChanged();
+    }
 
-    public bool DeleteDialogOpen { get; set; }
+    private async Task OnCreateDialogCloseAsync(bool accepted) {
+        CreateDialogOpen = false;
+
+        if (accepted) {
+            await OperationTypesService.CreateAsync(currentType);
+        }
+        currentType = new OperationType();
+        StateHasChanged();
+        await LoadDataAsync();
+    }
+
 
     private void OpenDeleteDialog(OperationType operationType) {
         DeleteDialogOpen = true;
@@ -78,32 +80,10 @@
         if (accepted) {
             await OperationTypesService.DeleteAsync(currentType.Id);
         }
-        currentType = null;
+        currentType = new OperationType();
         StateHasChanged();
         await LoadDataAsync();
     }
-
-    #endregion
-
-    #region CreateDialog
-
-    public bool CreateDialogOpen { get; set; }
-
-    private void OpenCreateDialog() {
-        CreateDialogOpen = true;
-        StateHasChanged();
-    }
-
-    private async Task OnCreateDialogCloseAsync(bool accepted) {
-        CreateDialogOpen = false;
-
-        if (accepted) {
-            await OperationTypesService.CreateAsync(newType);
-        }
-        StateHasChanged();
-        await LoadDataAsync();
-    }
-    #endregion
 
     private async Task LoadDataAsync() {
         operationTypes = await OperationTypesService.GetAllAsync();
