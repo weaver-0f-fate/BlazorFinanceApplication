@@ -7,7 +7,6 @@ namespace Services.Interfaces {
         public Task<List<T>> GetAllAsync();
         public Task<T> GetAsync(Guid id);
         public Task CreateAsync(T item);
-        public Task UpdateAsync(T item);
         public Task DeleteAsync(Guid id);
     }
 }

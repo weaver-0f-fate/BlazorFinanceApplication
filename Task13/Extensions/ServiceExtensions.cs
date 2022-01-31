@@ -8,6 +8,7 @@ namespace Task13.Extensions {
         public static void ConfigureServices(this IServiceCollection services) {
             services.AddTransient<IOperationsService, OperationsService>();
             services.AddTransient<IOperationTypesService, OperationTypesService>();
+            services.AddTransient<IOutcomeService, OutcomeService>();
 
             services.AddTransient<ICacheService<OperationType>, CacheService<OperationType>>();
             services.AddTransient<ICacheService<Operation>, CacheService<Operation>>();
