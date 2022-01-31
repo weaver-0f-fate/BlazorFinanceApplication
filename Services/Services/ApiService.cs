@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,31 +13,36 @@ namespace Services.Services {
             httpClient = new HttpClient();
         }
 
-        public async Task<List<T>> GetAllAsync(string Uri) {
-            using (var response = await httpClient.GetAsync(Uri)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<T>>(apiResponse);
-            }
+        public async Task<List<T>> GetAllAsync(string uri) {
+            using var response = await httpClient.GetAsync(uri); 
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<T>>(apiResponse);
         }
 
-
-        public Task CreateAsync(T item, string Uri) {
-            throw new NotImplementedException();
+        public async Task<T> GetByIdAsync(string uri) {
+            using var response = await httpClient.GetAsync(uri); 
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(apiResponse);
         }
 
-        public async Task DeleteAsync(string Uri) {
-            using (var response = await httpClient.DeleteAsync(Uri)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-            };
+        public async Task CreateAsync(object item, string uri) {
+            using var response = await httpClient.PostAsync(uri, GetContent(item)); 
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            var receivedOperation = JsonConvert.DeserializeObject<T>(apiResponse);
         }
 
-        public async Task<T> GetByIdAsync(Guid id, string Uri) {
-            await Task.Delay(1);
-            throw new NotImplementedException();
+        public async Task UpdateAsync(object item, string uri) {
+            using var response = await httpClient.PutAsync(uri, GetContent(item)); 
+            string apiResponse = await response.Content.ReadAsStringAsync();
         }
 
-        public Task UpdateAsync(T item, string Uri) {
-            throw new NotImplementedException();
+        public async Task DeleteAsync(string uri) {
+            using var response = await httpClient.DeleteAsync(uri);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+        }
+
+        private StringContent GetContent(object item) {
+            return new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
         }
     }
 }

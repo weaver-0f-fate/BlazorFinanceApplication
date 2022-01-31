@@ -27,46 +27,17 @@ namespace Services.Services {
         }
 
         public async Task<Operation> GetAsync(Guid id) {
-            Operation operation;
-
-            using (var response = await httpClient.GetAsync($"{Resources.ApiOperationUri}{id}")) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                operation = JsonConvert.DeserializeObject<Operation>(apiResponse);
-            }
-
-            //cacheService.UpdateCacheValues(operationTypes);
-            return operation;
+            var uri = $"{Resources.ApiOperationUri}{id}";
+            return await apiService.GetByIdAsync(uri);
         }
 
         public async Task CreateAsync(OperationCreateDTO operation) {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(operation), Encoding.UTF8, "application/json");
-            Operation receivedOperation;
-            using (var response = await httpClient.PostAsync(Resources.ApiOperationUri, content)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                receivedOperation = JsonConvert.DeserializeObject<Operation>(apiResponse);
-
-                if (response.StatusCode is HttpStatusCode.Created) {
-                    //TODO add to cache?
-                }
-                else {
-                    //TODO show exception to user.
-                }
-            }
+            await apiService.CreateAsync(operation, Resources.ApiOperationUri);
         }
 
         public async Task UpdateAsync(Guid id, OperationCreateDTO operationDTO) {
-            var content = new StringContent(JsonConvert.SerializeObject(operationDTO), Encoding.UTF8, "application/json");
-
-            using (var response = await httpClient.PutAsync($"{Resources.ApiOperationUri}{id}", content)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-
-                if (response.StatusCode is HttpStatusCode.NoContent) {
-                    //TODO update in cache
-                }
-                else {
-                    //TODO report exception
-                }
-            }
+            var uri = $"{Resources.ApiOperationUri}{id}";
+            await apiService.UpdateAsync(operationDTO, uri);
         }
 
         public async Task DeleteAsync(Guid id) {

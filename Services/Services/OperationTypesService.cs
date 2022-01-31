@@ -32,19 +32,7 @@ namespace Services.Services {
         }
 
         public async Task CreateAsync(OperationType operationType) {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(operationType), Encoding.UTF8, "application/json");
-            OperationType receivedType;
-            using (var response = await httpClient.PostAsync(Resources.ApiOperationTypeUri, content)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                receivedType = JsonConvert.DeserializeObject<OperationType>(apiResponse);
-
-                if(response.StatusCode is HttpStatusCode.Created) {
-                    //TODO add to cache?
-                }
-                else {
-                    //TODO show exception to user.
-                }
-            }
+            await apiService.CreateAsync(operationType, Resources.ApiOperationTypeUri);
         }
 
 
