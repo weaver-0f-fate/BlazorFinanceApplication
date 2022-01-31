@@ -25,7 +25,7 @@ namespace Services.Services {
         public async Task<List<OperationType>> GetAllAsync() {
             //var operationTypes = await apiService.GetAllAsync();
 
-            List<OperationType> operationTypes = new List<OperationType>();
+            var operationTypes = new List<OperationType>();
 
             using (var response = await httpClient.GetAsync($"{Resources.ApiUrl}OperationTypes")) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -41,8 +41,8 @@ namespace Services.Services {
             //return await cacheService.GetOrCreateAsync(id, x => apiService.GetByIdAsync(x));
         }
 
-        public async Task CreateAsync(OperationType item) {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+        public async Task CreateAsync(OperationType operationType) {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(operationType), Encoding.UTF8, "application/json");
             OperationType receivedType;
             using (var response = await httpClient.PostAsync($"{Resources.ApiUrl}OperationTypes", content)) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -57,6 +57,8 @@ namespace Services.Services {
             }
         }
 
+
+
         public Task UpdateAsync(OperationType item) {
             throw new NotImplementedException();
         }
@@ -66,6 +68,9 @@ namespace Services.Services {
 
                 if(response.StatusCode is HttpStatusCode.NoContent) {
                     //TODO delete from cache
+                }
+                else {
+                    //report exception
                 }
             }
         }
