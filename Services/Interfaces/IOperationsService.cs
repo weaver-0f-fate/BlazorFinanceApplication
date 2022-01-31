@@ -10,5 +10,6 @@ namespace Services.Interfaces {
         public Task<IEnumerable<Operation>> GetAllAtDateAsync(DateTime date);
         public Task<IEnumerable<Operation>> GetAllAtPeriodAsync(DateTime startDate, DateTime endDate);
         public Task CreateAsync(OperationCreateDTO operation);
+        public Task UpdateAsync(Guid id, OperationCreateDTO operation);
     }
 }

@@ -52,73 +52,73 @@
 </table>
 
 @code {
-        private List<Operation> operations = new List<Operation>();
-        private OperationCreateDTO newOperation = new OperationCreateDTO();
-        private List<OperationType> OperationTypes = new List<OperationType>();
-        private Operation currentOperation;
-        private OperationCreateDTO updatedOperation;
+    private List<Operation> operations = new List<Operation>();
+    private OperationCreateDTO newOperation = new OperationCreateDTO();
+    private List<OperationType> OperationTypes = new List<OperationType>();
+    private Operation currentOperation;
+    private OperationCreateDTO updatedOperation;
 
-        protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync() {
 
-            await LoadDataAsync();
+        await LoadDataAsync();
 
-            OperationTypes = await OperationTypesService.GetAllAsync();
+        OperationTypes = await OperationTypesService.GetAllAsync();
+    }
+
+    #region DeleteDialog
+
+    public bool DeleteDialogOpen { get; set; }
+
+    private void OpenDeleteDialog(Operation operation) {
+        DeleteDialogOpen = true;
+        currentOperation = operation;
+        StateHasChanged();
+    }
+
+    private async Task OnDeleteDialogClose(bool accepted) {
+        DeleteDialogOpen = false;
+
+        if (accepted) {
+            await OperationsService.DeleteAsync(currentOperation.Id);
         }
 
-        #region DeleteDialog
 
-        public bool DeleteDialogOpen { get; set; }
+        currentOperation = null;
+        StateHasChanged();
+        await LoadDataAsync();
+    }
+    #endregion
 
-        private void OpenDeleteDialog(Operation operation) {
-            DeleteDialogOpen = true;
-            currentOperation = operation;
-            StateHasChanged();
+    #region CreateDialog
+    public bool CreateDialogOpen { get; set; }
+
+    private void OpenCreateDialog() {
+        CreateDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnCreateDialogClose(bool accepted) {
+        CreateDialogOpen = false;
+
+        if (accepted) {
+            await OperationsService.CreateAsync(newOperation);
         }
 
-        private async Task OnDeleteDialogClose(bool accepted) {
-            DeleteDialogOpen = false;
+        StateHasChanged();
+        await LoadDataAsync();
+    }
+    #endregion
 
-            if (accepted) {
-                await OperationsService.DeleteAsync(currentOperation.Id);
-            }
+    #region UpdateDialog
+    public bool UpdateDialogOpen { get; set; }
 
-
-            currentOperation = null;
-            StateHasChanged();
-            await LoadDataAsync();
-        }
-        #endregion
-
-        #region CreateDialog
-        public bool CreateDialogOpen { get; set; }
-
-        private void OpenCreateDialog() {
-            CreateDialogOpen = true;
-            StateHasChanged();
-        }
-
-        private async Task OnCreateDialogClose(bool accepted) {
-            CreateDialogOpen = false;
-
-            if (accepted) {
-                await OperationsService.CreateAsync(newOperation);
-            }
-
-            StateHasChanged();
-            await LoadDataAsync();
-        }
-        #endregion
-
-        #region UpdateDialog
-        public bool UpdateDialogOpen { get; set; }
-
-        private void OpenUpdateDialog(Operation operation) {
-            UpdateDialogOpen = true;
-            updatedOperation = new OperationCreateDTO {
-                Name = operation.Name,
-                Amount = operation.Amount,
-                Date = operation.Date,
-                OperationTypeId = new Guid()
+    private void OpenUpdateDialog(Operation operation) {
+        UpdateDialogOpen = true;
+        currentOperation = operation;
+        updatedOperation = new OperationCreateDTO {
+            Name = operation.Name,
+            Amount = operation.Amount,
+            Date = operation.Date
         };
         StateHasChanged();
     }
@@ -127,7 +127,7 @@
         UpdateDialogOpen = false;
 
         if (accepted) {
-            await OperationsService.UpdateAsync(currentOperation);
+            await OperationsService.UpdateAsync(currentOperation.Id, updatedOperation);
         }
 
 

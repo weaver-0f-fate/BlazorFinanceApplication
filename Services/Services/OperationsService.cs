@@ -72,13 +72,23 @@ namespace Services.Services {
             }
         }
 
-        public async Task UpdateAsync(Operation operation) {
-            await Task.Delay(1);
-            //TODO
+        public async Task UpdateAsync(Guid id, OperationCreateDTO operationDTO) {
+            var content = new StringContent(JsonConvert.SerializeObject(operationDTO), Encoding.UTF8, "application/json");
+
+            using (var response = await httpClient.PutAsync($"{Resources.ApiUrl}Operations/{id}", content)) {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode is HttpStatusCode.NoContent) {
+                    //TODO update in cache
+                }
+                else {
+                    //TODO report exception
+                }
+            }
         }
 
         public async Task DeleteAsync(Guid id) {
-            using (var response = await httpClient.DeleteAsync($"{Resources.ApiUrl}Operations/" + id)) {
+            using (var response = await httpClient.DeleteAsync($"{Resources.ApiUrl}Operations/{id}")) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode is HttpStatusCode.NoContent) {
@@ -91,6 +101,10 @@ namespace Services.Services {
         }
 
         public Task CreateAsync(Operation item) {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Operation item) {
             throw new NotImplementedException();
         }
     }
