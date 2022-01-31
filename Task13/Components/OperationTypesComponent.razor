@@ -4,7 +4,7 @@
 
 
 @if (CreateDialogOpen) {
-    <DialogComponent Title="Create Operation Type" OnClose="@OnCreateDialogClose">
+    <DialogComponent Title="Create Operation Type" OnClose="@OnCreateDialogCloseAsync">
         <EditForm Model="@newType">
             <div class="form-group">
                 <label for="Name">Name</label>
@@ -19,7 +19,7 @@
 }
 
 @if (DeleteDialogOpen) {
-    <DialogComponent Title="Are you sure?"  OnClose="@OnDeleteDialogClose">
+    <DialogComponent Title="Are you sure?"  OnClose="@OnDeleteDialogCloseAsync">
         Delete @currentType.Name?
     </DialogComponent>
 }
@@ -60,8 +60,7 @@
     private OperationType currentType;
 
     protected override async Task OnInitializedAsync() {
-        var o = await OperationTypesService.GetAllAsync();
-        operationTypes = o.ToList();
+        await LoadDataAsync();
     }
 
     #region DeleteDialog
@@ -74,13 +73,14 @@
         StateHasChanged();
     }
 
-    private async Task OnDeleteDialogClose(bool accepted) {
+    private async Task OnDeleteDialogCloseAsync(bool accepted) {
         DeleteDialogOpen = false;
         if (accepted) {
             await OperationTypesService.DeleteAsync(currentType.Id);
         }
         currentType = null;
         StateHasChanged();
+        await LoadDataAsync();
     }
 
     #endregion
@@ -94,17 +94,18 @@
         StateHasChanged();
     }
 
-    private async Task OnCreateDialogClose(bool accepted) {
+    private async Task OnCreateDialogCloseAsync(bool accepted) {
         CreateDialogOpen = false;
 
         if (accepted) {
             await OperationTypesService.CreateAsync(newType);
         }
         StateHasChanged();
+        await LoadDataAsync();
     }
     #endregion
 
-    private void OnChange() {
-
+    private async Task LoadDataAsync() {
+        operationTypes = await OperationTypesService.GetAllAsync();
     }
 }
