@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.Services {
     public class OperationsService : IOperationsService {
-        public async Task<IEnumerable<Operation>> GetAllAsync() {
+        public async Task<List<Operation>> GetAllAsync() {
             await Task.Delay(1);
-            return new[] {
+            return new List<Operation> {
                 new Operation {
                     Id = new Guid(),
                     Name = "First Operation",
