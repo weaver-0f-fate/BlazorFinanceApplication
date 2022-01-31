@@ -10,7 +10,6 @@ namespace Services.Services {
         private ICacheService<OperationType> cacheService;
         private IApiService<OperationType> apiService;
 
-
         public OperationTypesService(ICacheService<OperationType> cacheService, IApiService<OperationType> apiService) {
             this.cacheService = cacheService;
             this.apiService = apiService;
@@ -20,12 +19,12 @@ namespace Services.Services {
             return await apiService.GetAllAsync(Resources.ApiOperationTypeUri);
         }
 
-        public Task<OperationType> GetAsync(Guid id) {
-            throw new NotImplementedException();
-            //return await cacheService.GetOrCreateAsync(id, x => apiService.GetByIdAsync(x));
+        public async Task<OperationType> GetByIdAsync(Guid id) {
+            var uri = $"{Resources.ApiOperationTypeUri}{id}";
+            return await apiService.GetByIdAsync(uri);
         }
 
-        public async Task CreateAsync(OperationType operationType) {
+        public async Task CreateAsync(object operationType) {
             await apiService.CreateAsync(operationType, Resources.ApiOperationTypeUri);
         }
 

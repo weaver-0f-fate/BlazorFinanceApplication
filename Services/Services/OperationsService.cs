@@ -20,12 +20,12 @@ namespace Services.Services {
             return await apiService.GetAllAsync(Resources.ApiOperationUri);
         }
 
-        public async Task<Operation> GetAsync(Guid id) {
+        public async Task<Operation> GetByIdAsync(Guid id) {
             var uri = $"{Resources.ApiOperationUri}{id}";
             return await apiService.GetByIdAsync(uri);
         }
 
-        public async Task CreateAsync(OperationCreateDTO operation) {
+        public async Task CreateAsync(object operation) {
             await apiService.CreateAsync(operation, Resources.ApiOperationUri);
         }
 
@@ -37,10 +37,6 @@ namespace Services.Services {
         public async Task DeleteAsync(Guid id) {
             var uri = $"{Resources.ApiOperationUri}{id}";
             await apiService.DeleteAsync(uri);
-        }
-
-        public Task CreateAsync(Operation item) {
-            throw new NotImplementedException();
         }
     }
 }
