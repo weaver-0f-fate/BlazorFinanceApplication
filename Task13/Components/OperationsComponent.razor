@@ -7,54 +7,13 @@
 
 @if (CreateDialogOpen) {
     <DialogComponent Title="Create Operation" OnClose="@OnCreateDialogClose">
-        <EditForm Model="@newOperation">
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <InputText @bind-Value=newOperation.Name class="form-control" id="Name" />
-            </div>
-            <div class="form-group">
-                <label for="Type">Operation Type</label>
-                <InputSelect @bind-Value="newOperation.OperationTypeId" class="form-control" id="Type">
-                    @foreach (var operationType in OperationTypes) {
-                        <option value="@operationType.Id">@operationType.Name</option>
-                    }
-                </InputSelect>
-            </div>
-            <div class="form-group">
-                <label for="Amount">Amount</label>
-                <InputNumber @bind-Value="newOperation.Amount" class="form-control" id="Amount" />
-            </div>
-            <div class="form-group">
-                <label for="Date">Date</label>
-                <InputDate @bind-Value="newOperation.Date" class="form-control" id="Date" />
-            </div>
-        </EditForm>
+        <OperationFormComponent Operation="@newOperation"/>
     </DialogComponent>
 }
 
 @if (UpdateDialogOpen) {
     <DialogComponent Title="Update Operation X" OnClose="@OnUpdateDialogClose">
-        <EditForm Model="@newOperation">
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <InputText @bind-Value=newOperation.Name class="form-control" id="Name" />
-            </div>
-            <div class="form-group">
-                <label for="Type">Operation Type</label>
-                <InputSelect @bind-Value="newOperation.OperationTypeId" class="form-control" id="Type">
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </InputSelect>
-            </div>
-            <div class="form-group">
-                <label for="Amount">Amount</label>
-                <InputNumber @bind-Value="newOperation.Amount" class="form-control" id="Amount" />
-            </div>
-            <div class="form-group">
-                <label for="Date">Date</label>
-                <InputDate @bind-Value="newOperation.Date" class="form-control" id="Date" />
-            </div>
-        </EditForm>
+        <OperationFormComponent Operation="@updatedOperation" />
     </DialogComponent>
 }
 
@@ -93,75 +52,84 @@
 </table>
 
 @code {
-    private List<Operation> operations = new List<Operation>();
-    private OperationCreateDTO newOperation = new OperationCreateDTO();
-    private List<OperationType> OperationTypes = new List<OperationType>();
-    private Operation currentOperation;
+        private List<Operation> operations = new List<Operation>();
+        private OperationCreateDTO newOperation = new OperationCreateDTO();
+        private List<OperationType> OperationTypes = new List<OperationType>();
+        private Operation currentOperation;
+        private OperationCreateDTO updatedOperation;
 
-    protected override async Task OnInitializedAsync() {
+        protected override async Task OnInitializedAsync() {
 
-        await LoadDataAsync();
+            await LoadDataAsync();
 
-        OperationTypes = await OperationTypesService.GetAllAsync();
-    }
-
-    #region DeleteDialog
-
-    public bool DeleteDialogOpen { get; set; }
-
-    private void OpenDeleteDialog(Operation operation) {
-        DeleteDialogOpen = true;
-        currentOperation = operation;
-        StateHasChanged();
-    }
-
-    private async Task OnDeleteDialogClose(bool accepted) {
-        DeleteDialogOpen = false;
-        
-        if (accepted) {
-            await OperationsService.DeleteAsync(currentOperation.Id);
+            OperationTypes = await OperationTypesService.GetAllAsync();
         }
 
+        #region DeleteDialog
 
-        currentOperation = null;
-        StateHasChanged();
-        await LoadDataAsync();
-    }
-    #endregion
+        public bool DeleteDialogOpen { get; set; }
 
-    #region CreateDialog
-    public bool CreateDialogOpen { get; set; }
-
-    private void OpenCreateDialog() {
-        CreateDialogOpen = true;
-        StateHasChanged();
-    }
-
-    private async Task OnCreateDialogClose(bool accepted) {
-        CreateDialogOpen = false;
-
-        if (accepted) {
-            await OperationsService.CreateAsync(newOperation);
+        private void OpenDeleteDialog(Operation operation) {
+            DeleteDialogOpen = true;
+            currentOperation = operation;
+            StateHasChanged();
         }
 
-        StateHasChanged();
-        await LoadDataAsync();
-    }
-    #endregion
+        private async Task OnDeleteDialogClose(bool accepted) {
+            DeleteDialogOpen = false;
 
-    #region UpdateDialog
-    public bool UpdateDialogOpen { get; set; }
+            if (accepted) {
+                await OperationsService.DeleteAsync(currentOperation.Id);
+            }
 
-    private void OpenUpdateDialog(Operation operation) {
-        UpdateDialogOpen = true;
-        currentOperation = operation;
+
+            currentOperation = null;
+            StateHasChanged();
+            await LoadDataAsync();
+        }
+        #endregion
+
+        #region CreateDialog
+        public bool CreateDialogOpen { get; set; }
+
+        private void OpenCreateDialog() {
+            CreateDialogOpen = true;
+            StateHasChanged();
+        }
+
+        private async Task OnCreateDialogClose(bool accepted) {
+            CreateDialogOpen = false;
+
+            if (accepted) {
+                await OperationsService.CreateAsync(newOperation);
+            }
+
+            StateHasChanged();
+            await LoadDataAsync();
+        }
+        #endregion
+
+        #region UpdateDialog
+        public bool UpdateDialogOpen { get; set; }
+
+        private void OpenUpdateDialog(Operation operation) {
+            UpdateDialogOpen = true;
+            updatedOperation = new OperationCreateDTO {
+                Name = operation.Name,
+                Amount = operation.Amount,
+                Date = operation.Date,
+                OperationTypeId = new Guid()
+        };
         StateHasChanged();
     }
 
     private async Task OnUpdateDialogClose(bool accepted) {
         UpdateDialogOpen = false;
-        await Task.Delay(1);
-        //TODO Update logic
+
+        if (accepted) {
+            await OperationsService.UpdateAsync(currentOperation);
+        }
+
 
         StateHasChanged();
         await LoadDataAsync();
