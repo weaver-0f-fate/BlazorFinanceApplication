@@ -23,17 +23,7 @@ namespace Services.Services {
         }
 
         public async Task<List<OperationType>> GetAllAsync() {
-            //var operationTypes = await apiService.GetAllAsync();
-
-            var operationTypes = new List<OperationType>();
-
-            using (var response = await httpClient.GetAsync($"{Resources.ApiUrl}OperationTypes")) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                operationTypes = JsonConvert.DeserializeObject<List<OperationType>>(apiResponse);
-            }
-
-            //cacheService.UpdateCacheValues(operationTypes);
-            return operationTypes;
+            return await apiService.GetAllAsync(Resources.ApiOperationTypeUri);
         }
 
         public Task<OperationType> GetAsync(Guid id) {
@@ -44,7 +34,7 @@ namespace Services.Services {
         public async Task CreateAsync(OperationType operationType) {
             StringContent content = new StringContent(JsonConvert.SerializeObject(operationType), Encoding.UTF8, "application/json");
             OperationType receivedType;
-            using (var response = await httpClient.PostAsync($"{Resources.ApiUrl}OperationTypes", content)) {
+            using (var response = await httpClient.PostAsync(Resources.ApiOperationTypeUri, content)) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 receivedType = JsonConvert.DeserializeObject<OperationType>(apiResponse);
 
@@ -63,16 +53,8 @@ namespace Services.Services {
             throw new NotImplementedException();
         }
         public async Task DeleteAsync(Guid id) {
-            using (var response = await httpClient.DeleteAsync($"{Resources.ApiUrl}OperationTypes/" + id)) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-
-                if(response.StatusCode is HttpStatusCode.NoContent) {
-                    //TODO delete from cache
-                }
-                else {
-                    //report exception
-                }
-            }
+            var uri = $"{Resources.ApiOperationTypeUri}{id}";
+            await apiService.DeleteAsync(uri);
         }
     }
 }

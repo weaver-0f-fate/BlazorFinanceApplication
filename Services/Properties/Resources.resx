@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUrl" xml:space="preserve">
-    <value>https://localhost:44398/api/</value>
+  <data name="ApiOperationTypeUri" xml:space="preserve">
+    <value>https://localhost:44398/api/OperationTypes/</value>
+  </data>
+  <data name="ApiOperationUri" xml:space="preserve">
+    <value>https://localhost:44398/api/Operations/</value>
   </data>
 </root>

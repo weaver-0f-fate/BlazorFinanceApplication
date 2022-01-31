@@ -61,11 +61,20 @@ namespace Services.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://localhost:44398/api/.
+        ///   Looks up a localized string similar to https://localhost:44398/api/OperationTypes/.
         /// </summary>
-        internal static string ApiUrl {
+        internal static string ApiOperationTypeUri {
             get {
-                return ResourceManager.GetString("ApiUrl", resourceCulture);
+                return ResourceManager.GetString("ApiOperationTypeUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://localhost:44398/api/Operations/.
+        /// </summary>
+        internal static string ApiOperationUri {
+            get {
+                return ResourceManager.GetString("ApiOperationUri", resourceCulture);
             }
         }
     }

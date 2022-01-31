@@ -23,31 +23,13 @@ namespace Services.Services {
         }
 
         public async Task<List<Operation>> GetAllAsync() {
-            //var operationTypes = await apiService.GetAllAsync();
-
-            var operations = new List<Operation>();
-
-            using (var response = await httpClient.GetAsync($"{Resources.ApiUrl}Operations")) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                operations = JsonConvert.DeserializeObject<List<Operation>>(apiResponse);
-            }
-
-            //cacheService.UpdateCacheValues(operationTypes);
-            return operations;
-        }
-
-        public async Task<IEnumerable<Operation>> GetAllAtDateAsync(DateTime date) {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Operation>> GetAllAtPeriodAsync(DateTime startDate, DateTime endDate) {
-            throw new NotImplementedException();
+            return await apiService.GetAllAsync(Resources.ApiOperationUri);
         }
 
         public async Task<Operation> GetAsync(Guid id) {
             Operation operation;
 
-            using (var response = await httpClient.GetAsync($"{Resources.ApiUrl}Operations/" + id)) {
+            using (var response = await httpClient.GetAsync($"{Resources.ApiOperationUri}{id}")) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 operation = JsonConvert.DeserializeObject<Operation>(apiResponse);
             }
@@ -59,7 +41,7 @@ namespace Services.Services {
         public async Task CreateAsync(OperationCreateDTO operation) {
             StringContent content = new StringContent(JsonConvert.SerializeObject(operation), Encoding.UTF8, "application/json");
             Operation receivedOperation;
-            using (var response = await httpClient.PostAsync($"{Resources.ApiUrl}Operations", content)) {
+            using (var response = await httpClient.PostAsync(Resources.ApiOperationUri, content)) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 receivedOperation = JsonConvert.DeserializeObject<Operation>(apiResponse);
 
@@ -75,7 +57,7 @@ namespace Services.Services {
         public async Task UpdateAsync(Guid id, OperationCreateDTO operationDTO) {
             var content = new StringContent(JsonConvert.SerializeObject(operationDTO), Encoding.UTF8, "application/json");
 
-            using (var response = await httpClient.PutAsync($"{Resources.ApiUrl}Operations/{id}", content)) {
+            using (var response = await httpClient.PutAsync($"{Resources.ApiOperationUri}{id}", content)) {
                 string apiResponse = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode is HttpStatusCode.NoContent) {
@@ -88,16 +70,8 @@ namespace Services.Services {
         }
 
         public async Task DeleteAsync(Guid id) {
-            using (var response = await httpClient.DeleteAsync($"{Resources.ApiUrl}Operations/{id}")) {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-
-                if (response.StatusCode is HttpStatusCode.NoContent) {
-                    //TODO delete from cache
-                }
-                else {
-                    //TODO report exception
-                }
-            }
+            var uri = $"{Resources.ApiOperationUri}{id}";
+            await apiService.DeleteAsync(uri);
         }
 
         public Task CreateAsync(Operation item) {
@@ -105,6 +79,14 @@ namespace Services.Services {
         }
 
         public Task UpdateAsync(Operation item) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Operation>> GetAllAtDateAsync(DateTime date) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Operation>> GetAllAtPeriodAsync(DateTime startDate, DateTime endDate) {
             throw new NotImplementedException();
         }
     }
