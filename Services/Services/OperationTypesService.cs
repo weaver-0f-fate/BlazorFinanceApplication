@@ -6,33 +6,30 @@ using System.Threading.Tasks;
 
 namespace Services.Services {
     public class OperationTypesService : IOperationTypesService {
+        private ICacheService<OperationType> cacheService;
+        private IApiService<OperationType> apiService;
+
+        public OperationTypesService(ICacheService<OperationType> cacheService, IApiService<OperationType> apiService) {
+            this.cacheService = cacheService;
+            this.apiService = apiService;
+        }
+
         public async Task<IEnumerable<OperationType>> GetAllAsync() {
-            await Task.Delay(1);
-            return new[] {
-                new OperationType {
-                    Id = new Guid(),
-                    IsIncome = true,
-                    Name = "Salary"
-                    },
-                new OperationType {
-                    Id = new Guid(),
-                    IsIncome = false,
-                    Name = "Taxes"
-                }
-            };
+            var operationTypes = await apiService.GetAllAsync();
+            cacheService.UpdateCacheValues(operationTypes);
+            return operationTypes;
         }
         public async Task<OperationType> GetAsync(Guid id) {
-            await Task.Delay(1);
-            //TODO 
-            return new OperationType {
-                Id = new Guid(),
-                IsIncome = false,
-                Name = "Taxes"
-            };
+            return await cacheService.GetOrCreateAsync(id, x => apiService.GetByIdAsync(x));
         }
         public async Task CreateAsync(OperationType item) {
             await Task.Delay(1);
-            //TODO 
+            //TODO
+            /*
+             * 1. Call Api to 
+             * 
+             * 
+             */
         }
         public async Task UpdateAsync(OperationType item) {
             await Task.Delay(1);

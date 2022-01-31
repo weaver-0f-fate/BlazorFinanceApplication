@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Services.Interfaces;
-using Services.Services;
+using Task13.Extensions;
 
 namespace Task13 {
     public class Startup {
@@ -20,8 +19,7 @@ namespace Task13 {
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddTransient<IOperationsService, OperationsService>();
-            services.AddTransient<IOperationTypesService, OperationTypesService>();
+            services.ConfigureServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +32,8 @@ namespace Task13 {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
