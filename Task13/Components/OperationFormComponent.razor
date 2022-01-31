@@ -4,25 +4,35 @@
 @inject IOperationTypesService OperationTypesService
 
 <EditForm Model="@Operation">
-    <div class="form-group">
-        <label for="Name">Name</label>
-        <InputText @bind-Value=Operation.Name class="form-control" id="Name" />
+    <div class="form-group row">
+        <label for="Name" class="col-sm-4 col-form-label">Name</label>
+        <div class="col-sm-8">
+            <InputText @bind-Value=Operation.Name class="form-control" id="Name" />
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Type">Operation Type</label>
-        <InputSelect @bind-Value="Operation.OperationTypeId" class="form-control" id="Type">
-            @foreach (var operationType in OperationTypes) {
-                <option value="@operationType.Id">@operationType.Name</option>
-            }
-        </InputSelect>
+    <div class="form-group row">
+        <label for="Type" class="col-sm-4 col-form-label">Operation Type</label>
+        <div class="col-sm-8">
+            <InputSelect @bind-Value="Operation.OperationTypeId" class="form-control" id="Type">
+                <option value="@Guid.Empty">Select Operation Type</option>
+                @foreach (var operationType in OperationTypes) {
+                    <option value="@operationType.Id">@operationType.Name</option>
+                }
+            </InputSelect>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Amount">Amount</label>
-        <InputNumber @bind-Value="Operation.Amount" class="form-control" id="Amount" />
+    <div class="form-group row">
+        <label for="Amount" class="col-sm-4 col-form-label">Amount</label>
+        <div class="col-sm-8">
+            <InputNumber @bind-Value="Operation.Amount" class="form-control" id="Amount" />
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Date">Date</label>
-        <InputDate @bind-Value="Operation.Date" class="form-control" id="Date" />
+    <div class="form-group row">
+        <label for="Date" class="col-sm-4 col-form-label">Date</label>
+        <div class="col-sm-8">
+            <InputDate @bind-Value="Operation.Date" class="form-control" id="Date" />
+        </div>
+
     </div>
 </EditForm>
 
