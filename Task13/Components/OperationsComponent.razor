@@ -1,8 +1,10 @@
 ﻿@using Core.Models
 @using Services.DTO
 @using Services.Interfaces
+@using AutoMapper
 @inject IOperationsService OperationsService
 @inject IOperationTypesService OperationTypesService
+@inject IMapper Mapper 
 
 
 @if (CreateDialogOpen) {
@@ -36,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var operation in operations) {
+        @foreach (var operation in Operations) {
             <tr>
                 <td>@operation.Name</td>
                 <td>@operation.OperationTypeName</td>
@@ -52,16 +54,17 @@
 </table>
 
 @code {
-    private List<Operation> operations = new List<Operation>();
+    [Parameter]
+    public List<Operation> Operations { get; set; } = new List<Operation>();
+    [Parameter]
+    public EventCallback OnUpdateCallback { get; set; }
+
     private OperationCreateDTO newOperation = new OperationCreateDTO();
     private List<OperationType> OperationTypes = new List<OperationType>();
     private Operation currentOperation;
     private OperationCreateDTO updatedOperation;
 
     protected override async Task OnInitializedAsync() {
-
-        await LoadDataAsync();
-
         OperationTypes = await OperationTypesService.GetAllAsync();
     }
 
@@ -85,7 +88,7 @@
 
         currentOperation = null;
         StateHasChanged();
-        await LoadDataAsync();
+        await OnUpdateCallback.InvokeAsync();
     }
     #endregion
 
@@ -105,7 +108,7 @@
         }
 
         StateHasChanged();
-        await LoadDataAsync();
+        await OnUpdateCallback.InvokeAsync();
     }
     #endregion
 
@@ -115,28 +118,17 @@
     private void OpenUpdateDialog(Operation operation) {
         UpdateDialogOpen = true;
         currentOperation = operation;
-        updatedOperation = new OperationCreateDTO {
-            Name = operation.Name,
-            Amount = operation.Amount,
-            Date = operation.Date
-        };
+        updatedOperation = Mapper.Map<OperationCreateDTO>(operation);
         StateHasChanged();
     }
 
     private async Task OnUpdateDialogClose(bool accepted) {
         UpdateDialogOpen = false;
-
         if (accepted) {
             await OperationsService.UpdateAsync(currentOperation.Id, updatedOperation);
         }
-
-
         StateHasChanged();
-        await LoadDataAsync();
+        await OnUpdateCallback.InvokeAsync();
     }
     #endregion
-
-    private async Task LoadDataAsync() {
-        operations = await OperationsService.GetAllAsync();
-    }
 }

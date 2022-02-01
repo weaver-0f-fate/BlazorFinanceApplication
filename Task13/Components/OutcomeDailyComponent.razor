@@ -1,0 +1,31 @@
+﻿@using Core.Structs
+
+<div>
+    <input type="date" @bind-value="SelectedDate.CurrentDate"/>
+    <button type="button" class="btn" @onclick="@ExtractDay">Previous</button>
+    <button type="button" class="btn" @onclick="@AddDay">Next</button>
+</div>
+
+@code {
+    [Parameter]
+    public Date SelectedDate { get; set; }
+
+    [Parameter]
+    public EventCallback OnUpdateCallback { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        await OnUpdateCallback.InvokeAsync();
+    }
+
+    private async Task AddDay() {
+        SelectedDate.AddDay();
+        await OnUpdateCallback.InvokeAsync();
+    }
+
+    private async Task ExtractDay() {
+        SelectedDate.ExtractDay();
+        await OnUpdateCallback.InvokeAsync();
+    }
+
+
+}

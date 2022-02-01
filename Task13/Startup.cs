@@ -19,6 +19,7 @@ namespace Task13 {
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
+            services.AddAutoMapper(typeof(Startup));
             services.ConfigureServices();
         }
 

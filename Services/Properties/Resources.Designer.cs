@@ -77,5 +77,14 @@ namespace Services.Properties {
                 return ResourceManager.GetString("ApiOperationUri", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://localhost:44398/api/Outcome/.
+        /// </summary>
+        internal static string ApiOutcomeUri {
+            get {
+                return ResourceManager.GetString("ApiOutcomeUri", resourceCulture);
+            }
+        }
     }
 }

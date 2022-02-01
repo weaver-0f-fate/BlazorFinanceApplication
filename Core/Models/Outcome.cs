@@ -7,7 +7,7 @@ namespace Core.Models {
         public DateTime EndDate { get; set; }
         public double TotalIncome { get; set; }
         public double TotalExpenses { get; set; }
-        public List<Operation> Operations { get; set; }
+        public List<Operation> Operations { get; set; } = new List<Operation>();
 
     }
 

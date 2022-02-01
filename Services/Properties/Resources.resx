@@ -123,4 +123,7 @@
   <data name="ApiOperationUri" xml:space="preserve">
     <value>https://localhost:44398/api/Operations/</value>
   </data>
+  <data name="ApiOutcomeUri" xml:space="preserve">
+    <value>https://localhost:44398/api/Outcome/</value>
+  </data>
 </root>

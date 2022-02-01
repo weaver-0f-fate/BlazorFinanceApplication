@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Services {
-    public class CacheService<T> : ICacheService<T> where T : AbstractModel{
+    public class CacheService<T> : ICacheService<T> {
         private MemoryCache cache;
 
         public CacheService() {
@@ -29,7 +29,7 @@ namespace Services.Services {
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromSeconds(SecondsToExpiration));
 
-            cache.Set(cacheEntry.Id, cacheEntry, cacheEntryOptions);
+            //cache.Set(cacheEntry.Id, cacheEntry, cacheEntryOptions);
         }
 
         public void Delete(Guid key) {
@@ -38,7 +38,7 @@ namespace Services.Services {
             }
         }
         public void Update(T item) {
-            Delete(item.Id);
+            //Delete(item.Id);
             AddToCache(item);
         }
 

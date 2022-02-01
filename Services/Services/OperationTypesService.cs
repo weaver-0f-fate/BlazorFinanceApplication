@@ -16,12 +16,12 @@ namespace Services.Services {
         }
 
         public async Task<List<OperationType>> GetAllAsync() {
-            return await apiService.GetAllAsync(Resources.ApiOperationTypeUri);
+            return await apiService.GetCollectionByUriAsync(Resources.ApiOperationTypeUri);
         }
 
         public async Task<OperationType> GetByIdAsync(Guid id) {
             var uri = $"{Resources.ApiOperationTypeUri}{id}";
-            return await apiService.GetByIdAsync(uri);
+            return await apiService.GetItemByUriAsync(uri);
         }
 
         public async Task CreateAsync(object operationType) {

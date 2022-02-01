@@ -13,13 +13,13 @@ namespace Services.Services {
             httpClient = new HttpClient();
         }
 
-        public async Task<List<T>> GetAllAsync(string uri) {
+        public async Task<List<T>> GetCollectionByUriAsync(string uri) {
             using var response = await httpClient.GetAsync(uri); 
             string apiResponse = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<T>>(apiResponse);
         }
 
-        public async Task<T> GetByIdAsync(string uri) {
+        public async Task<T> GetItemByUriAsync(string uri) {
             using var response = await httpClient.GetAsync(uri); 
             string apiResponse = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(apiResponse);
