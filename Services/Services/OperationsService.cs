@@ -20,12 +20,7 @@ namespace Services.Services {
             return await apiService.GetCollectionByUriAsync(Resources.ApiOperationUri);
         }
 
-        public async Task<Operation> GetByIdAsync(Guid id) {
-            var uri = $"{Resources.ApiOperationUri}{id}";
-            return await apiService.GetItemByUriAsync(uri);
-        }
-
-        public async Task CreateAsync(object operation) {
+        public async Task CreateAsync(OperationCreateDTO operation) {
             await apiService.CreateAsync(operation, Resources.ApiOperationUri);
         }
 

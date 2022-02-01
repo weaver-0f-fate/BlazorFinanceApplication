@@ -19,18 +19,19 @@ namespace Services.Services {
             return await apiService.GetCollectionByUriAsync(Resources.ApiOperationTypeUri);
         }
 
-        public async Task<OperationType> GetByIdAsync(Guid id) {
-            var uri = $"{Resources.ApiOperationTypeUri}{id}";
-            return await apiService.GetItemByUriAsync(uri);
-        }
-
-        public async Task CreateAsync(object operationType) {
-            await apiService.CreateAsync(operationType, Resources.ApiOperationTypeUri);
+        public async Task CreateAsync(OperationType operationType) {
+            var response = await apiService.CreateAsync(operationType, Resources.ApiOperationTypeUri);
+            if(response.StatusCode is System.Net.HttpStatusCode.Created) {
+                cacheService.Create(operationType.Id, operationType);
+            }
         }
 
         public async Task DeleteAsync(Guid id) {
             var uri = $"{Resources.ApiOperationTypeUri}{id}";
-            await apiService.DeleteAsync(uri);
+            var response = await apiService.DeleteAsync(uri);
+            if (response.StatusCode is System.Net.HttpStatusCode.NoContent) {
+                cacheService.DeleteIfExists(id);
+            }
         }
     }
 }

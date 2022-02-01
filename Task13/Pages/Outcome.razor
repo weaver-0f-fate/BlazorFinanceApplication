@@ -23,12 +23,12 @@ else {
     <OutcomeMonthlyComponent SelectedPeriod="selectedPeriod" OnUpdateCallback="LoadDataAsync"/>
 }
 
-<p>
+
+<div class="col-3">
     <label>Total Income: @currentOutcome.TotalIncome</label>
-</p>
-<p>
     <label>Total Expenses: @currentOutcome.TotalExpenses</label>
-</p>
+</div>
+
 
 <OperationsComponent Operations="currentOutcome.Operations" OnUpdateCallback="LoadDataAsync"/>
 

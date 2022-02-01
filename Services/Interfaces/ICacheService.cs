@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces {
     public interface ICacheService<T> {
-        public Task<T> GetOrCreateAsync(Guid key, Func<Guid, Task<T>> createItem);
-        public void Delete(Guid key);
-        public void Update(T item);
-        public void UpdateCacheValues(IEnumerable<T> values);
+        public Task<T> GetOrCreateAsync(object key, Func<Task<T>> createItem);
+        public void Create(object key, T item);
+        public void DeleteIfExists(object key);
+        public void Update(object key, T item);
     }
 }

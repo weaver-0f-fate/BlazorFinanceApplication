@@ -9,8 +9,8 @@ namespace Services.Services {
     public class ApiService<T> : IApiService<T> {
         HttpClient httpClient;
 
-        public ApiService(){
-            httpClient = new HttpClient();
+        public ApiService(HttpClient client){
+            httpClient = client;
         }
 
         public async Task<List<T>> GetCollectionByUriAsync(string uri) {
@@ -25,20 +25,23 @@ namespace Services.Services {
             return JsonConvert.DeserializeObject<T>(apiResponse);
         }
 
-        public async Task CreateAsync(object item, string uri) {
+        public async Task<HttpResponseMessage> CreateAsync(object item, string uri) {
             using var response = await httpClient.PostAsync(uri, GetContent(item)); 
             string apiResponse = await response.Content.ReadAsStringAsync();
             var receivedOperation = JsonConvert.DeserializeObject<T>(apiResponse);
+            return response;
         }
 
-        public async Task UpdateAsync(object item, string uri) {
+        public async Task<HttpResponseMessage> UpdateAsync(object item, string uri) {
             using var response = await httpClient.PutAsync(uri, GetContent(item)); 
             string apiResponse = await response.Content.ReadAsStringAsync();
+            return response;
         }
 
-        public async Task DeleteAsync(string uri) {
+        public async Task<HttpResponseMessage> DeleteAsync(string uri) {
             using var response = await httpClient.DeleteAsync(uri);
             string apiResponse = await response.Content.ReadAsStringAsync();
+            return response;
         }
 
         private StringContent GetContent(object item) {

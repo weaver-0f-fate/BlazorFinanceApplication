@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Net.Http;
 using Task13.Extensions;
 
 namespace Task13 {
@@ -18,6 +19,8 @@ namespace Task13 {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddHttpClient();
 
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureServices();
