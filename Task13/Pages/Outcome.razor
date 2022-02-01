@@ -1,7 +1,7 @@
 ﻿@page "/outcome"
 @using Task13.Components
 @using Core.Enums
-@using Core.Structs
+@using Core.Aids
 @using Core.Models
 @using Services.Interfaces
 @inject IOutcomeService OutcomeService
@@ -26,6 +26,8 @@ else {
 
 <div class="col-3">
     <label>Total Income: @currentOutcome.TotalIncome</label>
+</div>
+<div class="col-3">
     <label>Total Expenses: @currentOutcome.TotalExpenses</label>
 </div>
 

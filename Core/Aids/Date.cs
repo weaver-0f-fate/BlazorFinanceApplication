@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Structs {
+namespace Core.Aids {
     public class Date {
         public DateTime CurrentDate { get; set; }
 

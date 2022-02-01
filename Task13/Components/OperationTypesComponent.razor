@@ -4,13 +4,13 @@
 
 
 @if (CreateDialogOpen) {
-    <DialogComponent Title="Create Operation Type" OnClose="@OnCreateDialogCloseAsync">
+    <DialogComponent Title="Create" OnClose="@OnCreateDialogCloseAsync">
         <OperationTypesFormComponent OperationType="@currentType"/>
     </DialogComponent>
 }
 
 @if (DeleteDialogOpen) {
-    <DialogComponent Title="Are you sure?"  OnClose="@OnDeleteDialogCloseAsync">
+    <DialogComponent Title="Delete"  OnClose="@OnDeleteDialogCloseAsync">
         Delete @currentType.Name?
     </DialogComponent>
 }
@@ -43,15 +43,18 @@
     private List<OperationType> operationTypes;
     private OperationType currentType;
 
-    public bool DeleteDialogOpen { get; set; }
-    public bool CreateDialogOpen { get; set; }
-
     protected override async Task OnInitializedAsync() {
         operationTypes = new List<OperationType>();
         currentType = new OperationType();
         await LoadDataAsync();
     }
 
+    private async Task LoadDataAsync() {
+        operationTypes = await OperationTypesService.GetAllAsync();
+    }
+
+    #region CreateDialog
+    private bool CreateDialogOpen { get; set; }
     private void OpenCreateDialog() {
         CreateDialogOpen = true;
         StateHasChanged();
@@ -67,8 +70,10 @@
         StateHasChanged();
         await LoadDataAsync();
     }
+    #endregion
 
-
+    #region DeleteDialog
+    private bool DeleteDialogOpen { get; set; }
     private void OpenDeleteDialog(OperationType operationType) {
         DeleteDialogOpen = true;
         currentType = operationType;
@@ -84,8 +89,5 @@
         StateHasChanged();
         await LoadDataAsync();
     }
-
-    private async Task LoadDataAsync() {
-        operationTypes = await OperationTypesService.GetAllAsync();
-    }
+    #endregion
 }

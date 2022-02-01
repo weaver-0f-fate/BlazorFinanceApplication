@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace Services.Services {
     public class OperationsService : IOperationsService {
-        private ICacheService<Operation> cacheService;
         private IApiService<Operation> apiService;
 
-        public OperationsService(ICacheService<Operation> cacheService, IApiService<Operation> apiService) {
-            this.cacheService = cacheService;
+        public OperationsService(IApiService<Operation> apiService) {
             this.apiService = apiService;
         }
 

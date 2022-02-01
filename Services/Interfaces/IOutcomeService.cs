@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Core.Structs;
+﻿using System.Threading.Tasks;
+using Core.Aids;
 using Core.Models;
 
 namespace Services.Interfaces {

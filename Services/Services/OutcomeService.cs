@@ -1,17 +1,14 @@
 ﻿using Services.Interfaces;
-using System;
 using System.Threading.Tasks;
-using Core.Structs;
+using Core.Aids;
 using Core.Models;
 using Services.Properties;
 
 namespace Services.Services {
     public class OutcomeService : IOutcomeService {
-        private ICacheService<Outcome> cacheService;
         private IApiService<Outcome> apiService;
 
-        public OutcomeService(ICacheService<Outcome> cacheService, IApiService<Outcome> apiService) {
-            this.cacheService = cacheService;
+        public OutcomeService(IApiService<Outcome> apiService) {
             this.apiService = apiService;
         }
 

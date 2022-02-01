@@ -8,19 +8,19 @@
 
 
 @if (CreateDialogOpen) {
-    <DialogComponent Title="Create Operation" OnClose="@OnCreateDialogClose">
+    <DialogComponent Title="Create" OnClose="@OnCreateDialogClose">
         <OperationFormComponent Operation="@newOperation"/>
     </DialogComponent>
 }
 
 @if (UpdateDialogOpen) {
-    <DialogComponent Title="Update Operation X" OnClose="@OnUpdateDialogClose">
+    <DialogComponent Title="Update" OnClose="@OnUpdateDialogClose">
         <OperationFormComponent Operation="@updatedOperation" />
     </DialogComponent>
 }
 
 @if (DeleteDialogOpen) {
-    <DialogComponent Title="Are you sure?" OnClose="@OnDeleteDialogClose">
+    <DialogComponent Title="Delete" OnClose="@OnDeleteDialogClose">
         Do you want to delete this entry?
     </DialogComponent>
 }
