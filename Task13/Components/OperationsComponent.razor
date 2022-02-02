@@ -4,12 +4,12 @@
 @using AutoMapper
 @inject IOperationsService OperationsService
 @inject IOperationTypesService OperationTypesService
-@inject IMapper Mapper 
+@inject IMapper Mapper
 
 
 @if (CreateDialogOpen) {
     <DialogComponent Title="Create" OnClose="@OnCreateDialogClose">
-        <OperationFormComponent Operation="@newOperation"/>
+        <OperationFormComponent Operation="@newOperation" />
     </DialogComponent>
 }
 
@@ -23,6 +23,12 @@
     <DialogComponent Title="Delete" OnClose="@OnDeleteDialogClose">
         Do you want to delete this entry?
     </DialogComponent>
+}
+
+@if (showErrorMessage) {
+    <div>
+        <label class="alert-danger">@errorMessage</label>
+    </div>
 }
 
 <table class="table">
@@ -63,13 +69,20 @@
     private List<OperationType> OperationTypes = new List<OperationType>();
     private Operation currentOperation;
     private OperationCreateDTO updatedOperation;
+    private bool showErrorMessage;
+    private string errorMessage;
 
     protected override async Task OnInitializedAsync() {
-        OperationTypes = await OperationTypesService.GetAllAsync();
+        try {
+            OperationTypes = await OperationTypesService.GetAllAsync();
+        }
+        catch (Exception ex) {
+            errorMessage = ex.Message;
+            showErrorMessage = true;
+        }
     }
 
     #region DeleteDialog
-
     public bool DeleteDialogOpen { get; set; }
 
     private void OpenDeleteDialog(Operation operation) {
@@ -82,10 +95,14 @@
         DeleteDialogOpen = false;
 
         if (accepted) {
-            await OperationsService.DeleteAsync(currentOperation.Id);
+            try {
+                await OperationsService.DeleteAsync(currentOperation.Id);
+            }
+            catch (Exception ex) {
+                errorMessage = ex.Message;
+                showErrorMessage = true;
+            }
         }
-
-
         currentOperation = null;
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
@@ -104,7 +121,14 @@
         CreateDialogOpen = false;
 
         if (accepted) {
-            await OperationsService.CreateAsync(newOperation);
+            try {
+                await OperationsService.CreateAsync(newOperation);
+            }
+            catch (Exception ex) {
+                errorMessage = ex.Message;
+                showErrorMessage = true;
+            }
+
         }
 
         StateHasChanged();
@@ -125,7 +149,13 @@
     private async Task OnUpdateDialogClose(bool accepted) {
         UpdateDialogOpen = false;
         if (accepted) {
-            await OperationsService.UpdateAsync(currentOperation.Id, updatedOperation);
+            try {
+                await OperationsService.UpdateAsync(currentOperation.Id, updatedOperation);
+            }
+            catch (Exception ex) {
+                errorMessage = ex.Message;
+                showErrorMessage = true;
+            }
         }
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();

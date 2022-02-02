@@ -17,12 +17,11 @@
 </div>
 
 @if (type is OutcomeType.Daily) {
-    <OutcomeDailyComponent SelectedDate="selectedDate" OnUpdateCallback="@LoadDataAsync"/>
+    <OutcomeDailyComponent SelectedDate="selectedDate" OnUpdateCallback="@LoadDataAsync" />
 }
 else {
-    <OutcomeMonthlyComponent SelectedPeriod="selectedPeriod" OnUpdateCallback="LoadDataAsync"/>
+    <OutcomeMonthlyComponent SelectedPeriod="selectedPeriod" OnUpdateCallback="LoadDataAsync" />
 }
-
 
 <div class="col-3">
     <label>Total Income: @currentOutcome.TotalIncome</label>
@@ -32,7 +31,7 @@ else {
 </div>
 
 
-<OperationsComponent Operations="currentOutcome.Operations" OnUpdateCallback="LoadDataAsync"/>
+<OperationsComponent Operations="currentOutcome.Operations" OnUpdateCallback="LoadDataAsync" />
 
 @code {
     private Core.Models.Outcome currentOutcome = new Core.Models.Outcome();
@@ -51,11 +50,14 @@ else {
     }
 
     private async Task LoadDataAsync() {
-        if(type is OutcomeType.Daily) {
-            currentOutcome = await OutcomeService.GetOutcomeAtDate(selectedDate);
+        try {
+            if (type is OutcomeType.Daily) {
+                currentOutcome = await OutcomeService.GetOutcomeAtDate(selectedDate);
+            }
+            if (type is OutcomeType.Monthly) {
+                currentOutcome = await OutcomeService.GetOutcomeAtPeriod(selectedPeriod);
+            }
         }
-        if(type is OutcomeType.Monthly) {
-            currentOutcome = await OutcomeService.GetOutcomeAtPeriod(selectedPeriod);
-        }
+        catch { }
     }
 }
