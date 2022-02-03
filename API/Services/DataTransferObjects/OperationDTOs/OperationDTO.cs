@@ -7,7 +7,7 @@ namespace Services.DataTransferObjects.OperationDTOs {
         public OperationTypeDTO OperationTypeDTO { get; set; }
         public DateTime Date { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Amount should be positive.")]
-        public int Amount { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Amount should be positive.")]
+        public double Amount { get; set; }
     }
 }

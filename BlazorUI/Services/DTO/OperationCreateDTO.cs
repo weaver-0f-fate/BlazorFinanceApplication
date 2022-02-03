@@ -13,7 +13,7 @@ namespace Services.DTO {
         public DateTime Date { get; set; } = DateTime.Now;
         
         [Required]
-        [Range(0, int.MaxValue)]
-        public int Amount { get; set; }
+        [Range(0, double.MaxValue)]
+        public double Amount { get; set; }
     }
 }
