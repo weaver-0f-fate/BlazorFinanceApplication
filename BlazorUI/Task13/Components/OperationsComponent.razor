@@ -45,10 +45,17 @@
     </thead>
     <tbody>
         @foreach (var operation in Operations) {
-             <tr class="background-color:#FF0000">
-                <td class="background-color:#FF0000">@operation.Name</td>
+            var color = "color: red";
+            var amount = $"-{operation.Amount}";
+            if (operation.OperationTypeDTO.IsIncome){
+                color = "color: green";
+                amount = $"{operation.Amount}";
+            }
+
+             <tr style=@color>
+                <td>@operation.Name</td>
                 <td>@operation.OperationTypeDTO.Name</td>
-                <td>@operation.Amount</td>
+                <td>@amount</td>
                 <td>@operation.Date.ToShortDateString()</td>
                 <td>
                     <button type="button" class="btn" @onclick="() => OpenUpdateDialog(operation)">Edit</button>
