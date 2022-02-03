@@ -45,16 +45,16 @@
     </thead>
     <tbody>
         @foreach (var operation in Operations) {
-            <tr>
-                <td>@operation.Name</td>
-                <td>@operation.OperationTypeName</td>
+             <tr class="background-color:#FF0000">
+                <td class="background-color:#FF0000">@operation.Name</td>
+                <td>@operation.OperationTypeDTO.Name</td>
                 <td>@operation.Amount</td>
                 <td>@operation.Date.ToShortDateString()</td>
                 <td>
                     <button type="button" class="btn" @onclick="() => OpenUpdateDialog(operation)">Edit</button>
                     <button type="button" class="btn" @onclick="() => OpenDeleteDialog(operation)">Delete</button>
                 </td>
-            </tr>
+              </tr>    
         }
     </tbody>
 </table>
