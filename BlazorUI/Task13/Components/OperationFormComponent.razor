@@ -59,8 +59,9 @@
         foreach(var op in OperationTypes) {
             OpTypes.Add(op.Id, op);
         }
-        if(Operation.OperationTypeDTO is not null) {
-            operationTypeId = Operation.OperationTypeDTO.Id;
+        if(Operation.OperationTypeDTO is null) {
+            Operation.OperationTypeDTO = OperationTypes.FirstOrDefault();
         }
+        operationTypeId = Operation.OperationTypeDTO.Id;
     }
 }
