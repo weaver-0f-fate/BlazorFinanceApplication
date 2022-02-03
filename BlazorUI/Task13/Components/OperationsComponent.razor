@@ -24,12 +24,6 @@
     </DialogComponent>
 }
 
-@if (showErrorMessage) {
-    <div>
-        <label class="alert-danger">@errorMessage</label>
-    </div>
-}
-
 <table class="table">
     <thead>
         <tr>
@@ -73,17 +67,9 @@
 
     private List<OperationType> OperationTypes = new List<OperationType>();
     private Operation currentOperation;
-    private bool showErrorMessage;
-    private string errorMessage;
 
     protected override async Task OnInitializedAsync() {
-        try {
-            OperationTypes = await OperationTypesService.GetAllAsync();
-        }
-        catch (Exception ex) {
-            errorMessage = ex.Message;
-            showErrorMessage = true;
-        }
+        OperationTypes = await OperationTypesService.GetAllAsync();
     }
 
     public bool DeleteDialogOpen { get; set; }
@@ -98,13 +84,7 @@
         DeleteDialogOpen = false;
 
         if (accepted) {
-            try {
-                await OperationsService.DeleteAsync(currentOperation.Id);
-            }
-            catch (Exception ex) {
-                errorMessage = ex.Message;
-                showErrorMessage = true;
-            }
+             await OperationsService.DeleteAsync(currentOperation.Id);
         }
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
@@ -122,14 +102,7 @@
     private async Task OnCreateDialogClose(bool accepted) {
         CreateDialogOpen = false;
         if (accepted) {
-            try {
-                await OperationsService.CreateAsync(currentOperation);
-            }
-            catch (Exception ex) {
-                errorMessage = ex.Message;
-                showErrorMessage = true;
-            }
-
+            await OperationsService.CreateAsync(currentOperation);
         }
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
@@ -147,13 +120,7 @@
     private async Task OnUpdateDialogClose(bool accepted) {
         UpdateDialogOpen = false;
         if (accepted) {
-            try {
-                await OperationsService.UpdateAsync(currentOperation.Id, currentOperation);
-            }
-            catch (Exception ex) {
-                errorMessage = ex.Message;
-                showErrorMessage = true;
-            }
+            await OperationsService.UpdateAsync(currentOperation.Id, currentOperation);
         }
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();

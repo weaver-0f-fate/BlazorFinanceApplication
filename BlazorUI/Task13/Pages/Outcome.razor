@@ -50,14 +50,11 @@ else {
     }
 
     private async Task LoadDataAsync() {
-        try {
-            if (type is OutcomeType.Daily) {
-                currentOutcome = await OutcomeService.GetOutcomeAtDate(selectedDate);
-            }
-            if (type is OutcomeType.Monthly) {
-                currentOutcome = await OutcomeService.GetOutcomeAtPeriod(selectedPeriod);
-            }
+        if (type is OutcomeType.Daily) {
+            currentOutcome = await OutcomeService.GetOutcomeAtDate(selectedDate);
         }
-        catch { }
+        if (type is OutcomeType.Monthly) {
+            currentOutcome = await OutcomeService.GetOutcomeAtPeriod(selectedPeriod);
+        }
     }
 }

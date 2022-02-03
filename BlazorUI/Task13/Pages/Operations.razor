@@ -17,9 +17,6 @@
     }
 
     private async Task LoadDataAsync() {
-        try {
-            operations = await OperationsService.GetAllAsync();
-        }
-        catch { }
+        operations = await OperationsService.GetAllAsync();
     }
 }

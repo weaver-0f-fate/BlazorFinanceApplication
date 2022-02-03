@@ -15,11 +15,6 @@
     </DialogComponent>
 }
 
-@if (showErrorMessage) { 
-    <div>
-        <label class="alert-danger">@errorMessage</label>
-    </div>
-}
 <table class="table">
     <thead>
         <tr>
@@ -47,8 +42,6 @@
 @code {
     private List<OperationType> operationTypes;
     private OperationType currentType;
-    private bool showErrorMessage;
-    private string errorMessage;
 
     protected override async Task OnInitializedAsync() {
         operationTypes = new List<OperationType>();
@@ -57,13 +50,7 @@
     }
 
     private async Task LoadDataAsync() {
-        try {
-            operationTypes = await OperationTypesService.GetAllAsync();
-        }
-        catch(Exception ex) {
-            errorMessage = ex.Message;
-            showErrorMessage = true;
-        }
+        operationTypes = await OperationTypesService.GetAllAsync();
     }
 
     #region CreateDialog
@@ -76,14 +63,8 @@
 
     private async Task OnCreateDialogCloseAsync(bool accepted) {
         CreateDialogOpen = false;
-                if (accepted) {
-            try {
-                await OperationTypesService.CreateAsync(currentType);
-            }
-            catch (Exception ex) {
-                errorMessage = ex.Message;
-                showErrorMessage = true;
-            }
+        if (accepted) {
+            await OperationTypesService.CreateAsync(currentType);
         }
         StateHasChanged();
         await LoadDataAsync();
@@ -101,13 +82,7 @@
     private async Task OnDeleteDialogCloseAsync(bool accepted) {
         DeleteDialogOpen = false;
         if (accepted) {
-            try {
-                await OperationTypesService.DeleteAsync(currentType.Id);
-            }
-            catch (Exception ex) {
-                errorMessage = ex.Message;
-                showErrorMessage = true;
-            }
+            await OperationTypesService.DeleteAsync(currentType.Id);
         }
         StateHasChanged();
         await LoadDataAsync();
