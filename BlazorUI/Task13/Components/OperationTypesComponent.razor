@@ -69,14 +69,14 @@
     #region CreateDialog
     private bool CreateDialogOpen { get; set; }
     private void OpenCreateDialog() {
+        currentType = new OperationType();
         CreateDialogOpen = true;
         StateHasChanged();
     }
 
     private async Task OnCreateDialogCloseAsync(bool accepted) {
         CreateDialogOpen = false;
-
-        if (accepted) {
+                if (accepted) {
             try {
                 await OperationTypesService.CreateAsync(currentType);
             }
@@ -85,7 +85,6 @@
                 showErrorMessage = true;
             }
         }
-        currentType = new OperationType();
         StateHasChanged();
         await LoadDataAsync();
     }
@@ -110,7 +109,6 @@
                 showErrorMessage = true;
             }
         }
-        currentType = new OperationType();
         StateHasChanged();
         await LoadDataAsync();
     }

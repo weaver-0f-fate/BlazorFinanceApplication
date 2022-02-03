@@ -4,18 +4,17 @@
 @using AutoMapper
 @inject IOperationsService OperationsService
 @inject IOperationTypesService OperationTypesService
-@inject IMapper Mapper
 
 
 @if (CreateDialogOpen) {
     <DialogComponent Title="Create" OnClose="@OnCreateDialogClose">
-        <OperationFormComponent Operation="@newOperation" />
+        <OperationFormComponent Operation="@currentOperation" />
     </DialogComponent>
 }
 
 @if (UpdateDialogOpen) {
     <DialogComponent Title="Update" OnClose="@OnUpdateDialogClose">
-        <OperationFormComponent Operation="@updatedOperation" />
+        <OperationFormComponent Operation="@currentOperation" />
     </DialogComponent>
 }
 
@@ -72,10 +71,8 @@
     [Parameter]
     public EventCallback OnUpdateCallback { get; set; }
 
-    private OperationCreateDTO newOperation = new OperationCreateDTO();
     private List<OperationType> OperationTypes = new List<OperationType>();
     private Operation currentOperation;
-    private OperationCreateDTO updatedOperation;
     private bool showErrorMessage;
     private string errorMessage;
 
@@ -89,7 +86,6 @@
         }
     }
 
-    #region DeleteDialog
     public bool DeleteDialogOpen { get; set; }
 
     private void OpenDeleteDialog(Operation operation) {
@@ -110,26 +106,24 @@
                 showErrorMessage = true;
             }
         }
-        currentOperation = null;
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
     }
-    #endregion
 
-    #region CreateDialog
+
     public bool CreateDialogOpen { get; set; }
 
     private void OpenCreateDialog() {
         CreateDialogOpen = true;
+        currentOperation = new Operation();
         StateHasChanged();
     }
 
     private async Task OnCreateDialogClose(bool accepted) {
         CreateDialogOpen = false;
-
         if (accepted) {
             try {
-                await OperationsService.CreateAsync(newOperation);
+                await OperationsService.CreateAsync(currentOperation);
             }
             catch (Exception ex) {
                 errorMessage = ex.Message;
@@ -137,19 +131,16 @@
             }
 
         }
-
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
     }
-    #endregion
 
-    #region UpdateDialog
+   
     public bool UpdateDialogOpen { get; set; }
 
     private void OpenUpdateDialog(Operation operation) {
-        UpdateDialogOpen = true;
         currentOperation = operation;
-        updatedOperation = Mapper.Map<OperationCreateDTO>(operation);
+        UpdateDialogOpen = true;
         StateHasChanged();
     }
 
@@ -157,7 +148,7 @@
         UpdateDialogOpen = false;
         if (accepted) {
             try {
-                await OperationsService.UpdateAsync(currentOperation.Id, updatedOperation);
+                await OperationsService.UpdateAsync(currentOperation.Id, currentOperation);
             }
             catch (Exception ex) {
                 errorMessage = ex.Message;
@@ -167,5 +158,4 @@
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
     }
-    #endregion
 }

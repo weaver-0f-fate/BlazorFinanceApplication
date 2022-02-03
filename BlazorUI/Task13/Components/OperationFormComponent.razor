@@ -13,10 +13,10 @@
     <div class="form-group row">
         <label for="Type" class="col-sm-4 col-form-label">Operation Type</label>
         <div class="col-sm-8">
-            <InputSelect @bind-Value="Operation.OperationTypeId" class="form-control" id="Type">
-                <option value="@Guid.Empty">Select Operation Type</option>
+            <InputSelect @bind-Value="Operation.OperationTypeDTO" class="form-control" id="Type" >
+                <option>Select Operation Type</option>
                 @foreach (var operationType in OperationTypes) {
-                    <option value="@operationType.Id">@operationType.Name</option>
+                    <option value="@operationType">@operationType.Name</option>
                 }
             </InputSelect>
         </div>
@@ -40,9 +40,11 @@
     private List<OperationType> OperationTypes = new List<OperationType>();
 
     [Parameter]
-    public OperationCreateDTO Operation { get; set; }
+    public Operation Operation { get; set; }
 
     protected override async Task OnInitializedAsync() {
         OperationTypes = await OperationTypesService.GetAllAsync();
     }
+
+
 }

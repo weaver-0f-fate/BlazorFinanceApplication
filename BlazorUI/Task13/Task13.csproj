@@ -9,9 +9,4 @@
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-  </ItemGroup>
-
 </Project>

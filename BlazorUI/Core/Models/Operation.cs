@@ -6,5 +6,9 @@ namespace Core.Models {
         public DateTime Date { get; set; }
         public int Amount { get; set; }
 
+        public Operation() {
+            Id = Guid.Empty;
+            Date = DateTime.Now;
+        }
     }
 }

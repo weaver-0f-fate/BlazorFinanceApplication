@@ -10,10 +10,10 @@
     <div class="form-group row">
         <label for="IsIncome" class="col-sm-4 col-form-label">Type</label>
         <div class="col-sm-8">
-            <InputSelectBoolean @bind-Value="OperationType.IsIncome" class="form-control" id="IsIncome">
+            <select onchange="@OnSelectionChanged" class="form-control" id="IsIncome">
                 <option value="True">Income</option>
                 <option value="False">Expense</option>
-            </InputSelectBoolean>
+            </select>
         </div>
     </div>
 </EditForm>
@@ -21,4 +21,10 @@
 @code {
     [Parameter]
     public OperationType OperationType { get; set; }
+
+    private void OnSelectionChanged(ChangeEventArgs args){
+        if(bool.TryParse(args.Value.ToString(), out var value)){
+            OperationType.IsIncome = value;  
+        }
+    }
 }
