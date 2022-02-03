@@ -1,0 +1,91 @@
+﻿@using Core.Models
+@using Services.Interfaces
+@inject IOperationTypesService OperationTypesService
+
+
+@if (CreateDialogOpen) {
+    <DialogComponent Title="Create" OnClose="@OnCreateDialogCloseAsync">
+        <OperationTypesFormComponent OperationType="@currentType"/>
+    </DialogComponent>
+}
+
+@if (DeleteDialogOpen) {
+    <DialogComponent Title="Delete"  OnClose="@OnDeleteDialogCloseAsync">
+        Delete @currentType.Name?
+    </DialogComponent>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Operation Type Name</th>
+            <th>Income/Expense</th>
+            <th><button type="button" class="btn" @onclick="() => OpenCreateDialog()">Create</button></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var operationType in operationTypes) {
+            <tr>
+                <td>@operationType.Name</td>
+                @if (operationType.IsIncome) {
+                    <td>Income</td>
+                }
+                else {
+                    <td>Expense</td>
+                }
+                <td><button type="button" class="btn" @onclick="() => OpenDeleteDialog(operationType)">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<OperationType> operationTypes;
+    private OperationType currentType;
+
+    protected override async Task OnInitializedAsync() {
+        operationTypes = new List<OperationType>();
+        currentType = new OperationType();
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync() {
+        operationTypes = await OperationTypesService.GetAllAsync();
+    }
+
+    #region CreateDialog
+    private bool CreateDialogOpen { get; set; }
+    private void OpenCreateDialog() {
+        currentType = new OperationType();
+        CreateDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnCreateDialogCloseAsync(bool accepted) {
+        CreateDialogOpen = false;
+        if (accepted) {
+            await OperationTypesService.CreateAsync(currentType);
+        }
+        StateHasChanged();
+        await LoadDataAsync();
+    }
+    #endregion
+
+    #region DeleteDialog
+    private bool DeleteDialogOpen { get; set; }
+    private void OpenDeleteDialog(OperationType operationType) {
+        DeleteDialogOpen = true;
+        currentType = operationType;
+        StateHasChanged();
+    }
+
+    private async Task OnDeleteDialogCloseAsync(bool accepted) {
+        DeleteDialogOpen = false;
+        if (accepted) {
+            await OperationTypesService.DeleteAsync(currentType.Id);
+        }
+        StateHasChanged();
+        await LoadDataAsync();
+    }
+    #endregion
+}

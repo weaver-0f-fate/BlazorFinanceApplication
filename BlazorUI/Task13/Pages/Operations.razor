@@ -1,0 +1,22 @@
+﻿@page "/operations"
+@using Task13.Components
+@using Services.Interfaces
+@using Core.Models
+@inject IOperationsService OperationsService
+
+
+<h1>Operations</h1>
+
+<OperationsComponent Operations="operations" OnUpdateCallback="LoadDataAsync"/>
+
+@code {
+    private List<Operation> operations = new List<Operation>();
+
+    protected override async Task OnInitializedAsync() {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync() {
+        operations = await OperationsService.GetAllAsync();
+    }
+}
