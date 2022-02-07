@@ -1,0 +1,20 @@
+
+{
+    "region" : "eu-north-1",
+    "configuration" : "Debug",
+    "framework"     : "net6.0",
+    "self-contained" : true,
+    "application"    : "Task13",
+    "environment"    : "Task13-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0a0e8730459dbcd55\";\"aws:ec2:vpc,Subnets\"=\"subnet-084d929ddecac7d8f\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.2.10 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "task13-dev",
+    "instance-type"        : "c5.18xlarge",
+    "key-pair"             : "",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}
