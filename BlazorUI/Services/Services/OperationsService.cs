@@ -39,5 +39,10 @@ namespace Services.Services {
             var uri = $"{operationsUri.AbsoluteUri}{id}";
             await apiService.DeleteAsync(uri);
         }
+
+        public async Task DeleteAllAsync() {
+            var uri = $"{operationsUri.AbsoluteUri}";
+            await apiService.DeleteAsync(uri);
+        }
     }
 }

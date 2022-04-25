@@ -9,6 +9,7 @@ namespace Services.Interfaces {
     public interface IOperationsService : IService<Operation, OperationDTO>{
         public Task<OperationDTO> CreateOperationAsync(OperationForCreateDTO operationDTO);
         public Task<OperationDTO> UpdateOperationAsync(Guid id, OperationForUpdateDTO operationDTO);
+        public Task DeleteAllAsync();
         public Task<OutcomeDTO> GetOutcomeAtDateAsync(DateTime date);
         public Task<OutcomeDTO> GetOutcomeAtPeriodAsync(DateTime startDate, DateTime endDate);
         

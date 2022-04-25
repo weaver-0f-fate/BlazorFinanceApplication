@@ -27,6 +27,12 @@ namespace Data.Repositories {
                     .ToListAsync();
         }
 
+        public async Task DeleteAllAsync() {
+            var all = from c in Context.Set<Operation>() select c;
+            Context.Set<Operation>().RemoveRange(all);
+            await Context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Operation>> GetAtDateAsync(DateTime date) {
             return await GetByConditionAsync(x => x.Date.Date == date.Date);
         }

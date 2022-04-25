@@ -48,6 +48,11 @@ namespace Services.Services {
             return operationType;
         }
 
+        public async Task DeleteAllAsync() {
+            await _operationsRepository.DeleteAllAsync();
+        }
+
+
         public async Task<OutcomeDTO> GetOutcomeAtDateAsync(DateTime date) {
             var operations = await _operationsRepository.GetAtDateAsync(date);
             return CreateOutcome(operations, date, date);

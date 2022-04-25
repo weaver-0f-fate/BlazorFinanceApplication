@@ -49,5 +49,12 @@ namespace Task12.Controllers {
             await _operationsService.DeleteAsync(id);
             return NoContent();
         }
+
+        // DELETE api/operations
+        [HttpDelete]
+        public async Task<ActionResult<OperationDTO>> DeleteAllAsync() {
+            await _operationsService.DeleteAllAsync();
+            return NoContent();
+        }
     }
 }
