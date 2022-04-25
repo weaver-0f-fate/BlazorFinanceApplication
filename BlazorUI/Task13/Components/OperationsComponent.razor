@@ -24,6 +24,12 @@
     </DialogComponent>
 }
 
+@if (DeleteAllDialogOpen) {
+    <DialogComponent Title="Delete" OnClose="@OnDeleteAllDialogClose">
+        Do you want to delete All Operations?
+    </DialogComponent>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -56,6 +62,11 @@
                 </td>
               </tr>    
         }
+        <tr>
+            <td>
+                <button type="button" class="btn" @onclick="() => OpenDeleteAllDialog()">Delete All</button>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -85,6 +96,23 @@
 
         if (accepted) {
              await OperationsService.DeleteAsync(currentOperation.Id);
+        }
+        StateHasChanged();
+        await OnUpdateCallback.InvokeAsync();
+    }
+
+    public bool DeleteAllDialogOpen { get; set; }
+
+    private void OpenDeleteAllDialog() {
+        DeleteAllDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnDeleteAllDialogClose(bool accepted) {
+        DeleteAllDialogOpen = false;
+
+        if (accepted) {
+             await OperationsService.DeleteAllAsync();
         }
         StateHasChanged();
         await OnUpdateCallback.InvokeAsync();
